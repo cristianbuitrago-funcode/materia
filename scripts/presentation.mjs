@@ -1,7 +1,7 @@
 // Construye la presentación en un único archivo HTML, con todo incrustado:
 // tipografía, arte del juego, capturas y el tráiler.
 // Uso: node scripts/presentation.mjs [video.mp4] [salida.html]
-// Por defecto usa media/trailer-ecomision.mp4 y escribe media/presentacion-ecomision.html.
+// Por defecto usa media/trailer-ecomision.mp4 y escribe docs/index.html (lo que publica GitHub Pages).
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -14,7 +14,7 @@ import { worldIconSVG, iconSVG } from '../src/art/icons.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const VIDEO = path.resolve(process.argv[2] || path.join(ROOT, 'media', 'trailer-ecomision.mp4'));
-const OUT = path.resolve(process.argv[3] || path.join(ROOT, 'media', 'presentacion-ecomision.html'));
+const OUT = path.resolve(process.argv[3] || path.join(ROOT, 'docs', 'index.html'));
 const MIME = VIDEO.endsWith('.webm') ? 'video/webm' : 'video/mp4';
 
 // Capturas del juego tomadas del propio tráiler (sin la franja de textos de abajo).

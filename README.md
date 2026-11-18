@@ -26,7 +26,7 @@ Chromium y ffmpeg): el guion está en `scripts/trailer.cjs`.
 
 ## Presentación
 
-`media/presentacion-ecomision.html` es la presentación del proyecto (guía de acción socialmente
+`docs/index.html` es la presentación del proyecto (guía de acción socialmente
 responsable de UNIMINUTO) en un único archivo HTML, con el arte del juego y el tráiler incrustados.
 Empieza con la pantalla cubierta de basura, que vuela a sus canecas en cada diapositiva hasta que
 queda el tráiler de fondo; al final se reproduce el tráiler con sonido.
@@ -38,6 +38,9 @@ Controles: → o clic para avanzar, ← para volver, **N** muestra las notas del
 completo de cada sección), **F** pantalla completa y **R** reinicia el reloj de 5 minutos. Arriba se
 ve el tiempo total y el de la diapositiva actual frente al sugerido.
 Se regenera con `npm run presentation` (requiere ffmpeg); el contenido está en `presentation/template.html`.
+
+En línea: https://cristianbuitrago-funcode.github.io/materia-hp/ (GitHub Pages publica la carpeta
+`docs/` de la rama `ccr-bed63ebd-wf7rcm`; se activa una vez en *Settings → Pages*).
 
 ## Arquitectura técnica
 
