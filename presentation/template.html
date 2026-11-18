@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoMisión: Guardianes del Planeta</title>
+<style>
+@font-face { font-family: Fredoka; font-weight: 500; src: url(data:font/woff2;base64,__FONT500__) format('woff2'); }
+@font-face { font-family: Fredoka; font-weight: 700; src: url(data:font/woff2;base64,__FONT700__) format('woff2'); }
+:root {
+  --green: #2BB673; --green-dark: #14804A; --green-deep: #0B4A2B; --yellow: #FFD23F; --orange: #FF8A3D;
+  --ink: #17324D; --cream: #FFF9E8; --sky: #5CC8F5; --muted: #5F7183; --red: #EF5350;
+  --white-bin: #1E88E5; --black-bin: #2F343B;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #052214; overflow: hidden; font-family: Fredoka, 'Trebuchet MS', sans-serif; color: var(--ink); }
+#stage { position: fixed; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center; overflow: hidden; cursor: pointer;
+  background: linear-gradient(#bfe9ff, #e3f8e8 60%, #9be0b0); }
+img { user-select: none; -webkit-user-drag: none; }
+
+/* ---------- Fondo: video del tráiler, cielo contaminado, humo y basura */
+#bgvideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0; transition: opacity 1.4s ease, transform 1s ease; transform-origin: 50% 0; }
+/* De fondo, se recorta la franja de textos propia del tráiler. */
+#bgvideo.bg { transform: scale(1.16); }
+#dirt { position: absolute; inset: 0; z-index: 2; background: radial-gradient(ellipse at 50% 40%, #8c8170, #4f473d 70%, #2e2a25); transition: opacity 1.4s ease; }
+#smog { position: absolute; inset: -100px; z-index: 3; pointer-events: none; transition: opacity 1.4s ease; }
+.blob { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(70,62,56,.85), rgba(70,62,56,0) 70%); animation: drift 14s ease-in-out infinite alternate; }
+@keyframes drift { to { transform: translate(90px, -40px) scale(1.15); } }
+.trash { position: absolute; z-index: 5; filter: drop-shadow(0 8px 6px rgba(0,0,0,.35));
+  transform: rotate(var(--r)); transition: transform .85s cubic-bezier(.45,-0.35,.6,1), opacity .25s ease .65s; }
+.trash.front { z-index: 30; }
+.trash.flying { z-index: 40; }
+.trash.gone { transform: translate(var(--tx), var(--ty)) rotate(calc(var(--r) + 300deg)) scale(.18); opacity: 0; }
+.trash.instant { transition: none !important; }
+.fly { position: absolute; z-index: 31; pointer-events: none; width: 10px; height: 10px; border-radius: 50%; background: #1d1d1d; transition: opacity 1s; }
+.fly::before, .fly::after { content: ''; position: absolute; top: -6px; width: 9px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.75); }
+.fly::before { left: -6px; } .fly::after { right: -6px; }
+#bins { position: absolute; left: 50%; bottom: -230px; z-index: 41; display: flex; gap: 70px; transform: translateX(-50%); transition: bottom .45s cubic-bezier(.3,1.4,.5,1); }
+#bins.up { bottom: 6px; }
+#bins img { width: 170px; height: 204px; }
+.spark { position: absolute; z-index: 42; width: 26px; height: 26px; pointer-events: none; animation: spark 1.1s ease-out forwards; }
+@keyframes spark { from { transform: translate(0,0) scale(.4); opacity: 1; } to { transform: translate(var(--sx), -190px) scale(1.2) rotate(160deg); opacity: 0; } }
+
+/* ---------- Diapositivas */
+.slide { position: absolute; inset: 0; z-index: 10; opacity: 0; visibility: hidden; transform: scale(.96) translateY(24px);
+  transition: opacity .6s ease, transform .7s cubic-bezier(.2,.9,.3,1.15), visibility 0s .7s; pointer-events: none; }
+.slide.active { opacity: 1; visibility: visible; transform: none; transition: opacity .6s ease .15s, transform .7s cubic-bezier(.2,.9,.3,1.15) .15s, visibility 0s; pointer-events: auto; }
+.slide aside { display: none; }
+.card { position: absolute; left: 150px; right: 150px; top: 132px; bottom: 132px; padding: 56px 80px 60px; border-radius: 52px;
+  background: rgba(255,249,232,.93); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 8px solid #fff; box-shadow: 0 0 0 6px var(--green-dark), 0 30px 80px rgba(0,0,0,.45);
+  display: flex; flex-direction: column; }
+.sec { align-self: flex-start; display: inline-flex; align-items: center; gap: 14px; padding: 10px 26px; border-radius: 40px; background: var(--green-dark); color: #fff; font-weight: 700; font-size: 28px; letter-spacing: .5px; }
+.sec b { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--yellow); color: var(--ink); font-size: 26px; }
+h2 { font-weight: 700; font-size: 70px; line-height: 1.05; margin: 22px 0 18px; color: var(--green-deep); }
+h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
+.lead { font-size: 38px; line-height: 1.35; font-weight: 500; max-width: 1450px; }
+.row { display: flex; gap: 34px; margin-top: 34px; flex: 1; min-height: 0; }
+.box { flex: 1; border-radius: 36px; background: #fff; padding: 34px 36px; box-shadow: 0 8px 0 rgba(23,50,77,.08); border: 4px solid #e9e2cc; }
+.box h3 { font-size: 36px; font-weight: 700; color: var(--green-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 14px; }
+.box p, .box li { font-size: 30px; line-height: 1.34; font-weight: 500; }
+.box ul { list-style: none; display: grid; gap: 10px; }
+.box li { display: flex; gap: 16px; align-items: flex-start; }
+.box li::before { content: ''; flex: none; width: 22px; height: 22px; margin-top: 10px; border-radius: 6px; background: var(--green); transform: rotate(45deg); }
+.box.warn li::before { background: var(--red); }
+.box.ico { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.box.ico img { width: 170px; height: 170px; margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 16px; }
+.chip { padding: 14px 26px; border-radius: 40px; font-size: 30px; font-weight: 700; color: #fff; background: var(--green); box-shadow: 0 6px 0 rgba(0,0,0,.15); }
+.chip.y { background: var(--yellow); color: var(--ink); } .chip.o { background: var(--orange); } .chip.b { background: var(--white-bin); } .chip.p { background: #7B5EA7; }
+.hl { margin-top: 26px; padding: 26px 34px; border-radius: 30px; background: var(--green-dark); color: #fff; font-size: 34px; line-height: 1.35; font-weight: 500; display: flex; gap: 24px; align-items: center; }
+.hl img { width: 120px; height: 138px; flex: none; }
+.hl b { color: var(--yellow); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 90px 1.35fr; gap: 0; align-items: stretch; margin-top: 16px; }
+.vs .arrow { display: grid; place-items: center; font-size: 70px; color: var(--green); font-weight: 700; }
+.vs .box { padding: 20px 30px; }
+.tag { display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.tag.before { background: #8D6E63; } .tag.after { background: var(--green); }
+.vs .box p { font-size: 28px; line-height: 1.32; }
+.shot { border-radius: 30px; border: 6px solid #fff; box-shadow: 0 0 0 5px var(--green-dark), 0 18px 40px rgba(0,0,0,.25); width: 100%; height: auto; display: block; }
+.num { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--orange); color: #fff; font-size: 34px; font-weight: 700; box-shadow: 0 5px 0 rgba(0,0,0,.15); }
+.grid6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 30px; }
+.grid6 .box { padding: 26px 28px; display: flex; gap: 18px; align-items: flex-start; }
+.grid6 h4 { font-size: 31px; font-weight: 700; color: var(--green-dark); line-height: 1.15; margin-bottom: 6px; }
+.grid6 p { font-size: 25px; line-height: 1.32; }
+.quote { font-size: 44px; font-weight: 700; color: var(--green-deep); line-height: 1.25; }
+.bins3 { display: flex; gap: 30px; justify-content: center; }
+.bin { flex: 1; text-align: center; border-radius: 32px; padding: 22px 16px 26px; background: #fff; border: 5px solid; }
+.bin img { width: 150px; height: 180px; }
+.bin h4 { font-size: 38px; font-weight: 700; margin-top: 8px; }
+.bin p { font-size: 26px; line-height: 1.3; font-weight: 500; }
+
+/* Entradas animadas de cada elemento */
+.rv { opacity: 0; }
+.slide.active .rv { animation: rise .8s cubic-bezier(.2,.9,.3,1.2) both; animation-delay: calc(var(--i, 0) * 130ms + 280ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(40px) scale(.94); } to { opacity: 1; transform: none; } }
+.slide.active .pop { animation: pop .7s cubic-bezier(.3,1.6,.5,1) both; animation-delay: calc(var(--i, 0) * 130ms + 280ms); }
+@keyframes pop { from { opacity: 0; transform: scale(.3) rotate(-8deg); } to { opacity: 1; transform: none; } }
+.bob { animation: bob 2.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-16px); } }
+
+/* ---------- Portada */
+#s-cover .kick { position: absolute; left: 0; right: 0; top: 150px; text-align: center; color: #fff; font-weight: 700; font-size: 34px; letter-spacing: 1px; text-shadow: 0 3px 0 #000, 0 0 20px #000; }
+#s-cover .kick span { display: block; font-weight: 500; font-size: 30px; color: #ffe9a6; margin-top: 8px; }
+.logo { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+.logo .t1 { font-size: 220px; font-weight: 700; color: #fff; line-height: 1; -webkit-text-stroke: 34px var(--green-dark); paint-order: stroke fill; text-shadow: 0 16px 0 #0b5a33; }
+.logo .t2 { font-size: 86px; font-weight: 700; color: var(--yellow); -webkit-text-stroke: 18px var(--ink); paint-order: stroke fill; margin-top: 18px; }
+#s-cover .hint { position: absolute; z-index: 33; left: 0; right: 0; bottom: 70px; text-align: center; font-size: 32px; font-weight: 700; color: #fff; text-shadow: 0 3px 0 #000; animation: blink 1.6s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+#s-cover .villain { position: absolute; right: 70px; top: 520px; width: 420px; z-index: 32; }
+#s-cover .sad { position: absolute; left: 90px; top: 600px; width: 330px; }
+
+/* ---------- Cierre y tráiler */
+#s-close .card { align-items: center; justify-content: center; text-align: center; }
+#s-close .chars { display: flex; gap: 60px; justify-content: center; margin: 10px 0 20px; }
+#s-close .chars img { width: 270px; }
+#s-trailer { pointer-events: none; }
+.confetti { position: absolute; top: -30px; width: 22px; height: 14px; z-index: 45; pointer-events: none; animation: fall linear infinite; }
+@keyframes fall { to { transform: translateY(1160px) rotate(720deg); } }
+#thanks { position: absolute; inset: 0; z-index: 55; display: grid; place-items: center; background: rgba(5,34,20,.55); opacity: 0; pointer-events: none; transition: opacity 1s; }
+#thanks.on { opacity: 1; }
+#thanks div { text-align: center; color: #fff; }
+#thanks h1 { font-size: 200px; -webkit-text-stroke: 30px var(--green-dark); paint-order: stroke fill; }
+#thanks p { font-size: 46px; color: var(--yellow); font-weight: 700; text-shadow: 0 3px 0 #000; }
+#playbtn { position: absolute; left: 50%; top: 50%; z-index: 56; transform: translate(-50%,-50%); display: none; padding: 30px 60px; border: 0; border-radius: 60px;
+  background: var(--orange); color: #fff; font: 700 54px Fredoka, sans-serif; box-shadow: 0 10px 0 #b85a1c; cursor: pointer; }
+
+/* ---------- Interfaz del presentador */
+#hud { position: absolute; left: 0; right: 0; top: 0; height: 110px; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; pointer-events: none; transition: opacity .6s; }
+.pill { display: flex; align-items: center; gap: 14px; padding: 12px 26px; border-radius: 40px; background: rgba(255,249,232,.95); border: 4px solid var(--green-dark); font-size: 28px; font-weight: 700; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+.pill svg { width: 34px; height: 34px; }
+#clock.warn { border-color: var(--orange); color: #b85a1c; } #clock.over { border-color: var(--red); color: var(--red); }
+#meter { width: 260px; height: 20px; border-radius: 12px; background: #d9d2bd; overflow: hidden; }
+#meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--green), #8be04e); transition: width 1.2s ease; }
+#foot { position: absolute; left: 0; right: 0; bottom: 34px; z-index: 50; display: flex; justify-content: center; gap: 12px; pointer-events: none; transition: opacity .6s; }
+#foot i { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.45); border: 3px solid rgba(23,50,77,.5); transition: all .3s; }
+#foot i.on { width: 46px; border-radius: 10px; background: var(--yellow); }
+#notes { position: absolute; left: 150px; right: 150px; bottom: 20px; max-height: 470px; overflow: auto; z-index: 60; display: none; padding: 30px 40px; border-radius: 30px;
+  background: rgba(23,50,77,.96); color: #fff; font-size: 26px; line-height: 1.45; cursor: auto; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+#notes.on { display: block; }
+#notes h5 { font-size: 24px; color: var(--yellow); margin-bottom: 10px; }
+#notes p + p { margin-top: 12px; }
+.hide-ui #hud, .hide-ui #foot { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .bob, .fly, .confetti, #s-cover .hint { animation: none !important; }
+}
+</style>
+</head>
+<body>
+<div id="stage">
+  <video id="bgvideo" muted loop playsinline preload="auto"></video>
+  <div id="dirt"></div>
+  <div id="smog"></div>
+  <div id="trashlayer"></div>
+  <div id="bins"><img data-a="bins.white" alt=""><img data-a="bins.black" alt=""><img data-a="bins.green" alt=""></div>
+
+  <!-- 0 · Portada -->
+  <section class="slide" id="s-cover" data-time="10">
+    <div class="kick">CORPORACIÓN UNIVERSITARIA MINUTO DE DIOS – UNIMINUTO<span>Desarrollo Social Contemporáneo · Guía de construcción de una acción socialmente responsable</span></div>
+    <div class="logo"><div class="t1">EcoMisión</div><div class="t2">Guardianes del Planeta</div></div>
+    <img class="sad bob" data-a="chars.eco-sad" alt="ECO, el guardián del planeta, triste">
+    <img class="villain bob" data-a="chars.contaminator-sneaky" alt="CONTAMINATOR">
+    <div class="hint">Presiona → para empezar a limpiar el planeta</div>
+    <aside>
+      <p>Corporación Universitaria Minuto de Dios – UNIMINUTO · Desarrollo Social Contemporáneo · Guía de construcción de una acción socialmente responsable.</p>
+      <p>Presentamos EcoMisión: Guardianes del Planeta. Mientras avanzamos, la basura de esta pantalla se irá a su caneca: blanca, negra o verde.</p>
+    </aside>
+  </section>
+
+  <!-- 1 · Contextualización -->
+  <section class="slide" data-time="18">
+    <div class="card">
+      <div class="sec rv"><b>1</b>Contextualización de la problemática</div>
+      <h2 class="rv" style="--i:1">La contaminación por <em>residuos sólidos</em></h2>
+      <p class="lead rv" style="--i:2">Afecta los ecosistemas, los recursos naturales y la calidad de vida de las personas. La disposición inadecuada de las basuras y no saber separarlas contaminan:</p>
+      <div class="row">
+        <div class="box ico pop" style="--i:3"><img data-a="worlds.forest" alt=""><h3>El suelo</h3></div>
+        <div class="box ico pop" style="--i:4"><img data-a="worlds.ocean" alt=""><h3>El agua</h3></div>
+        <div class="box ico pop" style="--i:5"><img data-a="worlds.city" alt=""><h3>Los espacios naturales y públicos</h3></div>
+      </div>
+    </div>
+    <aside>
+      <p>La contaminación por residuos sólidos es una problemática socioambiental que afecta directamente los ecosistemas, los recursos naturales y la calidad de vida de las personas. La disposición inadecuada de las basuras y la falta de conocimiento sobre la correcta separación de los residuos contribuyen a la contaminación del suelo, el agua y otros espacios naturales.</p>
+    </aside>
+  </section>
+
+  <!-- 2 · Causas y actores -->
+  <section class="slide" data-time="18">
+    <div class="card">
+      <div class="sec rv"><b>1</b>Contextualización de la problemática</div>
+      <h2 class="rv" style="--i:1; margin:14px 0 4px">Causas y actores</h2>
+      <div class="row" style="margin-top:14px; flex:none">
+        <div class="box warn rv" style="--i:2; padding:28px 34px; flex:1.15"><h3>Principales causas</h3>
+          <ul><li>Falta de educación ambiental</li><li>Hábitos inadecuados de consumo</li><li>No conocer los códigos de separación</li><li>Poca conciencia de las consecuencias</li></ul></div>
+        <div class="box rv" style="--i:3; padding:28px 34px"><h3>Actores involucrados</h3>
+          <div class="chips" style="gap:12px"><span class="chip" style="font-size:26px;padding:10px 20px">Ciudadanos</span><span class="chip b" style="font-size:26px;padding:10px 20px">Familias</span><span class="chip o" style="font-size:26px;padding:10px 20px">Instituciones educativas</span><span class="chip p" style="font-size:26px;padding:10px 20px">Comunidades</span><span class="chip" style="font-size:26px;padding:10px 20px">Entidades de gestión de residuos</span></div></div>
+      </div>
+      <div class="hl rv" style="--i:4; margin-top:22px; padding:18px 30px; font-size:31px"><img data-a="chars.eco-happy" alt="" style="width:96px;height:110px"><span><b>Los niños</b> son una población clave: desde pequeños desarrollan hábitos y valores de cuidado del medioambiente.</span></div>
+    </div>
+    <aside>
+      <p>Entre las principales causas de esta problemática se encuentran la falta de educación ambiental, los hábitos inadecuados de consumo, el desconocimiento de los códigos de separación de residuos y la poca conciencia sobre las consecuencias que generan nuestras acciones cotidianas.</p>
+      <p>Los actores involucrados son los ciudadanos, las familias, las instituciones educativas, las comunidades y las entidades responsables de la gestión de residuos. Dentro de estos actores, los niños representan una población importante, ya que desde edades tempranas pueden desarrollar hábitos y valores relacionados con el cuidado del medioambiente.</p>
+    </aside>
+  </section>
+
+  <!-- 3 · Consecuencias y respuesta -->
+  <section class="slide" data-time="18">
+    <div class="card">
+      <div class="sec rv"><b>1</b>Contextualización de la problemática</div>
+      <h2 class="rv" style="--i:1; margin:14px 0 4px">Consecuencias… y nuestra respuesta</h2>
+      <div class="row">
+        <div class="box warn rv" style="--i:2"><h3>Consecuencias</h3>
+          <ul><li>Deterioro de los ecosistemas</li><li>Contaminación de fuentes hídricas</li><li>Afectación de la biodiversidad</li><li>Residuos acumulados en espacios públicos y naturales</li></ul></div>
+        <div class="box rv" style="--i:3; flex:1.1"><h3>Por eso proponemos…</h3>
+          <p>Fortalecer la <em>educación ambiental</em> para comprender la importancia de separar los residuos y asumir responsabilidades individuales y colectivas.</p>
+          <div class="hl" style="padding:18px 26px; font-size:30px"><img data-a="chars.reciclin-happy" alt="" style="width:92px;height:106px"><span>Un <b>videojuego educativo</b>: aprendizaje ambiental divertido, interactivo y significativo para los niños.</span></div>
+        </div>
+      </div>
+    </div>
+    <aside>
+      <p>Entre las consecuencias de esta problemática se encuentran el deterioro de los ecosistemas, la contaminación de fuentes hídricas, la afectación de la biodiversidad y la acumulación de residuos en espacios públicos y naturales.</p>
+      <p>Frente a esta situación, es fundamental fortalecer la educación ambiental mediante estrategias que permitan comprender la importancia de separar correctamente los residuos y asumir responsabilidades individuales y colectivas. Por esta razón, proponemos desarrollar un videojuego educativo que convierta el aprendizaje ambiental en una experiencia divertida, interactiva y significativa para los niños.</p>
+    </aside>
+  </section>
+
+  <!-- 4 · Apropiarse -->
+  <section class="slide" data-time="20">
+    <div class="card">
+      <div class="sec rv"><b>2</b>Apropiarse: hacerse cargo de la realidad</div>
+      <h2 class="rv" style="--i:1; margin:16px 0 4px">Así cambió nuestra mirada</h2>
+      <div class="vs rv" style="--i:2">
+        <div class="box"><span class="tag before">ANTES · La problemática</span><p>Era culpa de quienes arrojan residuos en lugares inadecuados.</p></div>
+        <div class="arrow">→</div>
+        <div class="box"><span class="tag after">AHORA</span><p>Es más amplia: falta de educación ambiental, hábitos de consumo y poca responsabilidad colectiva. <em>Separar, reducir y reutilizar</em> sí cuenta, y educar desde la infancia genera cambios duraderos.</p></div>
+      </div>
+      <div class="vs rv" style="--i:3">
+        <div class="box"><span class="tag before">ANTES · Los actores</span><p>La responsabilidad era de quienes recogen la basura y de quienes la arrojan.</p></div>
+        <div class="arrow">→</div>
+        <div class="box"><span class="tag after">AHORA</span><p><em>Todos somos actores:</em> la responsabilidad es compartida. Los niños aprenden a decidir con responsabilidad y lo transmiten a sus familias y comunidades.</p></div>
+      </div>
+    </div>
+    <aside>
+      <h5>¿Qué cambios se generaron en su percepción de la problemática?</h5>
+      <p>Antes de trabajar esta problemática, considerábamos que la contaminación por basuras era principalmente consecuencia de las personas que arrojaban residuos en lugares inadecuados. Sin embargo, durante el desarrollo del curso comprendimos que se trata de una situación más amplia, relacionada también con la falta de educación ambiental, los hábitos de consumo y la poca responsabilidad colectiva frente al manejo de los residuos.</p>
+      <p>Ahora reconocemos que pequeñas acciones cotidianas, como separar correctamente las basuras, reducir el consumo de productos innecesarios y reutilizar materiales, pueden contribuir a disminuir el impacto ambiental. También comprendimos que la educación desde la infancia es fundamental para generar cambios duraderos en la sociedad.</p>
+      <h5>¿Cómo veían a los actores antes y cómo los perciben ahora?</h5>
+      <p>Anteriormente, relacionábamos la responsabilidad de esta problemática principalmente con las personas encargadas de recoger las basuras y con quienes las arrojaban en espacios públicos. Actualmente, comprendemos que todos somos actores involucrados y que tenemos una responsabilidad compartida en el cuidado del medioambiente.</p>
+      <p>También reconocemos a los niños como participantes importantes en la transformación de esta realidad, ya que pueden aprender desde pequeños a tomar decisiones responsables y transmitir estos conocimientos a sus familias y comunidades. Por ello, consideramos que brindarles herramientas educativas puede contribuir a formar ciudadanos más conscientes y comprometidos con el planeta.</p>
+    </aside>
+  </section>
+
+  <!-- 5 · Ética -->
+  <section class="slide" data-time="18">
+    <div class="card">
+      <div class="sec rv"><b>3</b>Comprender éticamente la realidad</div>
+      <h2 class="rv" style="--i:1">Dignidad humana y <em>casa común</em></h2>
+      <p class="quote rv" style="--i:2; font-size:40px">“Todas las personas merecen vivir en un ambiente sano que garantice su bienestar y su salud.”</p>
+      <div class="row">
+        <div class="box rv" style="--i:3"><ul>
+          <li>Los residuos mal dispuestos afectan sobre todo a las comunidades más expuestas.</li>
+          <li>Cuidar el ambiente es respetar la dignidad de los demás.</li>
+          <li>Tenemos una responsabilidad con las futuras generaciones.</li></ul></div>
+        <div class="box rv" style="--i:4; flex:1"><h3>Valores que promueve EcoMisión</h3>
+          <div class="chips" style="gap:12px"><span class="chip">Respeto</span><span class="chip b">Solidaridad</span><span class="chip o">Responsabilidad</span><span class="chip y">Compromiso con la casa común</span></div></div>
+      </div>
+    </div>
+    <aside>
+      <p>La problemática de la contaminación por residuos sólidos se relaciona directamente con el concepto de dignidad humana, porque todas las personas merecen vivir en condiciones que garanticen su bienestar, su salud y el acceso a un ambiente sano.</p>
+      <p>Cuando los residuos se disponen de manera inadecuada, se contaminan los recursos naturales y se afectan las condiciones de vida de las comunidades, especialmente de aquellas que se encuentran más expuestas a los problemas ambientales.</p>
+      <p>Desde esta perspectiva, cuidar el medioambiente también significa respetar la dignidad de las personas y reconocer que nuestras acciones tienen consecuencias sobre los demás. Asimismo, implica asumir una responsabilidad con las futuras generaciones, garantizando que puedan disfrutar de un entorno saludable.</p>
+      <p>Por esta razón, EcoMisión busca promover valores como el respeto, la solidaridad, la responsabilidad y el compromiso con la casa común, incentivando desde la infancia una relación más consciente y respetuosa con la naturaleza.</p>
+    </aside>
+  </section>
+
+  <!-- 6 · La propuesta -->
+  <section class="slide" data-time="20">
+    <div class="card">
+      <div class="sec rv"><b>4</b>Actuar: encargarse de la realidad</div>
+      <h2 class="rv" style="--i:1">Nuestra propuesta: <em>EcoMisión</em></h2>
+      <div class="row" style="margin-top:14px">
+        <div style="flex:1.05; display:flex; flex-direction:column; gap:22px">
+          <p class="lead rv" style="--i:2; font-size:34px">Un videojuego educativo para niños de <em>5 a 12 años</em> que promueve la educación ambiental con una experiencia digital interactiva.</p>
+          <div class="box rv" style="--i:3; padding:26px 32px"><ul>
+            <li>Un personaje invita a convertirse en guardián del planeta.</li>
+            <li>Recorren escenarios: ciudad contaminada, bosque, playa y océano.</li>
+            <li>Recogen residuos y los clasifican en su caneca.</li></ul></div>
+        </div>
+        <div class="pop" style="--i:4; flex:1; display:flex; align-items:center"><img class="shot" data-a="frames.ocean" alt="El océano del juego, recuperado"></div>
+      </div>
+    </div>
+    <aside>
+      <p>Nuestra propuesta de acción socialmente responsable consiste en desarrollar un videojuego educativo llamado EcoMisión: Guardianes del Planeta, dirigido a niños entre los 5 y los 12 años.</p>
+      <p>El proyecto busca promover la educación ambiental mediante una experiencia digital interactiva en la que los niños aprendan sobre la contaminación por residuos sólidos y la correcta separación de las basuras.</p>
+      <p>El videojuego comienza con un personaje que invita a los participantes a convertirse en guardianes del planeta. Para cumplir su misión, deberán recorrer diferentes escenarios, como una ciudad contaminada, un bosque, una playa y el océano, donde encontrarán residuos que deberán recoger y clasificar en los contenedores correspondientes.</p>
+    </aside>
+  </section>
+
+  <!-- 7 · Cómo se juega -->
+  <section class="slide" data-time="20">
+    <div class="card">
+      <div class="sec rv"><b>4</b>Actuar: encargarse de la realidad</div>
+      <h2 class="rv" style="--i:1">Arrastrar, clasificar y <em>aprender</em></h2>
+      <div class="row" style="margin-top:20px">
+        <div class="bins3" style="flex:1.15">
+          <div class="bin pop" style="--i:2; border-color:var(--white-bin)"><img data-a="bins.white" alt=""><h4 style="color:var(--white-bin)">BLANCA</h4><p>Aprovechables</p></div>
+          <div class="bin pop" style="--i:3; border-color:var(--black-bin)"><img data-a="bins.black" alt=""><h4>NEGRA</h4><p>No aprovechables</p></div>
+          <div class="bin pop" style="--i:4; border-color:var(--green)"><img data-a="bins.green" alt=""><h4 style="color:var(--green-dark)">VERDE</h4><p>Orgánicos aprovechables</p></div>
+        </div>
+        <div class="rv" style="--i:5; flex:1; display:flex; flex-direction:column; gap:18px">
+          <img class="shot" data-a="frames.explain" alt="Explicación del juego cuando hay un error">
+          <p class="lead" style="font-size:31px">Si se equivocan, el juego <em>explica por qué</em>: aprenden mientras juegan.</p>
+        </div>
+      </div>
+    </div>
+    <aside>
+      <p>La mecánica principal consiste en arrastrar cada residuo hasta el contenedor adecuado, utilizando el código de colores colombiano: blanco para residuos aprovechables, negro para residuos no aprovechables y verde para residuos orgánicos aprovechables.</p>
+      <p>Cuando los jugadores cometan un error, el videojuego ofrecerá explicaciones sencillas sobre la clasificación correcta de cada residuo, permitiendo que aprendan mientras juegan.</p>
+    </aside>
+  </section>
+
+  <!-- 8 · Motivación y progreso -->
+  <section class="slide" data-time="18">
+    <div class="card">
+      <div class="sec rv"><b>4</b>Actuar: encargarse de la realidad</div>
+      <h2 class="rv" style="--i:1">Niveles, retos y <em>recompensas</em></h2>
+      <div class="row" style="margin-top:16px">
+        <div style="flex:1; display:flex; flex-direction:column; gap:22px">
+          <div class="chips rv" style="--i:2"><span class="chip y">Monedas ecológicas</span><span class="chip">Experiencia</span><span class="chip o">Insignias</span><span class="chip b">Personajes y escenarios</span><span class="chip p">Firebase: registro y progreso</span></div>
+          <div class="hl rv" style="--i:3"><img data-a="chars.eco-happy" alt=""><span>No buscamos que <b>memoricen</b>: queremos que <b>comprendan</b> sus decisiones y creen hábitos para la vida diaria.</span></div>
+        </div>
+        <div class="pop" style="--i:4; flex:.95; display:flex; align-items:center"><img class="shot" data-a="frames.boss" alt="Un jefe final del juego"></div>
+      </div>
+    </div>
+    <aside>
+      <p>Además, contará con diferentes niveles, desafíos y un sistema de recompensas mediante monedas ecológicas, puntos de experiencia e insignias que permitirán desbloquear nuevos personajes y escenarios. También se contempla la integración de Firebase para el registro de jugadores y el almacenamiento de su progreso.</p>
+      <p>Con esta propuesta buscamos que los niños no solamente memoricen dónde deben depositar cada residuo, sino que comprendan la importancia de sus decisiones y desarrollen hábitos responsables que puedan aplicar en su vida cotidiana.</p>
+    </aside>
+  </section>
+
+  <!-- 9 · Objetivos -->
+  <section class="slide" data-time="20">
+    <div class="card">
+      <div class="sec rv"><b>5</b>Perspectiva pedagógica y comunicativa</div>
+      <h2 class="rv" style="--i:1">Objetivos</h2>
+      <div class="hl rv" style="--i:2; margin-top:6px"><img data-a="chars.reciclin-happy" alt=""><span><b>General:</b> promover la educación ambiental en niños de 5 a 12 años con un videojuego educativo e interactivo que fomente la correcta separación de residuos y hábitos responsables con el medioambiente.</span></div>
+      <div class="row" style="margin-top:28px">
+        <div class="box rv" style="--i:3; display:flex; gap:22px"><span class="num">1</span><p>Diseñar <em>escenarios, misiones y actividades</em> para identificar y clasificar los residuos según el código de colores de Colombia.</p></div>
+        <div class="box rv" style="--i:4; display:flex; gap:22px"><span class="num">2</span><p>Fomentar la <em>conciencia ambiental</em> y la responsabilidad individual con experiencias lúdicas sobre las consecuencias de disponer mal los residuos.</p></div>
+      </div>
+    </div>
+    <aside>
+      <h5>5.1. Objetivo general</h5>
+      <p>Promover la educación ambiental en niños de 5 a 12 años mediante el desarrollo de un videojuego educativo e interactivo que fomente la correcta separación de residuos sólidos y la construcción de hábitos responsables con el medioambiente.</p>
+      <h5>5.2. Objetivos específicos</h5>
+      <p>1. Diseñar escenarios, misiones y actividades interactivas que permitan a los niños identificar y clasificar correctamente los residuos según el código de colores establecido en Colombia.</p>
+      <p>2. Fomentar la conciencia ambiental y la responsabilidad individual mediante experiencias lúdicas que permitan comprender las consecuencias de una inadecuada disposición de los residuos.</p>
+    </aside>
+  </section>
+
+  <!-- 10 · Justificación -->
+  <section class="slide" data-time="20">
+    <div class="card">
+      <div class="sec rv"><b>5</b>Perspectiva pedagógica y comunicativa</div>
+      <h2 class="rv" style="--i:1">¿Por qué un <em>videojuego</em>?</h2>
+      <div class="grid6" style="grid-template-columns:repeat(2,1fr); margin-top:20px">
+        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>La infancia forma hábitos</h4><p>Es la etapa en la que se construyen conocimientos, valores y hábitos para toda la vida.</p></div></div>
+        <div class="box rv" style="--i:3"><span class="num">2</span><div><h4>Despertar el interés</h4><p>Los métodos tradicionales no siempre logran interesar a todos los niños en lo ambiental.</p></div></div>
+        <div class="box rv" style="--i:4"><span class="num">3</span><div><h4>Aprender participando</h4><p>La tecnología facilita aprender explorando e interactuando, combinando entretenimiento y educación.</p></div></div>
+        <div class="box rv" style="--i:5"><span class="num">4</span><div><h4>Del juego a la vida</h4><p>Comportamientos que se llevan al hogar, la escuela y la comunidad: ciudadanos comprometidos.</p></div></div>
+      </div>
+    </div>
+    <aside>
+      <p>La educación ambiental desde la infancia es fundamental para construir una sociedad más consciente y comprometida con el cuidado de los recursos naturales. Los niños se encuentran en una etapa importante para desarrollar conocimientos, valores y hábitos que pueden acompañarlos durante toda su vida.</p>
+      <p>Sin embargo, los métodos tradicionales de enseñanza no siempre consiguen despertar el interés de todos los niños frente a las problemáticas ambientales. Por esta razón, consideramos que la tecnología y los videojuegos pueden convertirse en herramientas educativas que faciliten el aprendizaje mediante la participación, la exploración y la interacción.</p>
+      <p>EcoMisión: Guardianes del Planeta surge como una alternativa que combina entretenimiento y educación para enseñar la correcta separación de residuos de una manera sencilla y atractiva. A través de sus escenarios, misiones y recompensas, los niños podrán reconocer diferentes tipos de residuos, aprender a clasificarlos y comprender por qué es importante cuidar los espacios naturales.</p>
+      <p>La importancia de esta propuesta está en que busca ir más allá del aprendizaje teórico, promoviendo comportamientos responsables que puedan trasladarse al hogar, la escuela y la comunidad. De esta manera, el videojuego pretende contribuir a la formación de ciudadanos comprometidos con la protección del medioambiente y el bienestar colectivo.</p>
+    </aside>
+  </section>
+
+  <!-- 11 · Estrategias -->
+  <section class="slide" data-time="22">
+    <div class="card">
+      <div class="sec rv"><b>5</b>Perspectiva pedagógica y comunicativa</div>
+      <h2 class="rv" style="--i:1">Estrategias y acciones</h2>
+      <div class="grid6">
+        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>Diseño del videojuego</h4><p>Personajes y escenarios adaptados a niños de 5 a 12 años.</p></div></div>
+        <div class="box rv" style="--i:3"><span class="num">2</span><div><h4>Misiones de clasificación</h4><p>Ciudades, bosques, playas y océanos: blanca, negra y verde.</p></div></div>
+        <div class="box rv" style="--i:4"><span class="num">3</span><div><h4>Retroalimentación</h4><p>Una explicación breve de cuál era la opción correcta y por qué.</p></div></div>
+        <div class="box rv" style="--i:5"><span class="num">4</span><div><h4>Recompensas</h4><p>Monedas, experiencia, insignias y desbloqueos que motivan.</p></div></div>
+        <div class="box rv" style="--i:6"><span class="num">5</span><div><h4>Registro y progreso</h4><p>Firebase para guardar avances y continuar las misiones.</p></div></div>
+        <div class="box rv" style="--i:7"><span class="num">6</span><div><h4>Hábitos cotidianos</h4><p>Separar en casa y en el colegio, e involucrar a las familias.</p></div></div>
+      </div>
+    </div>
+    <aside>
+      <p>1. Diseño y desarrollo del videojuego: se creará un entorno digital interactivo con personajes, escenarios y elementos visuales adaptados a niños entre los 5 y los 12 años. El diseño buscará facilitar la navegación y mantener el interés de los participantes.</p>
+      <p>2. Misiones de recolección y clasificación de residuos: los niños recorrerán diferentes escenarios, como ciudades, bosques, playas y océanos, donde deberán recoger residuos y depositarlos en los contenedores correspondientes: blanco, negro y verde.</p>
+      <p>3. Aprendizaje mediante retroalimentación: cuando los participantes clasifiquen incorrectamente un residuo, recibirán una explicación breve y sencilla que les permitirá comprender cuál era la opción correcta y por qué.</p>
+      <p>4. Sistema de recompensas y motivación: se incorporarán monedas ecológicas, puntos de experiencia, insignias y desbloqueo de personajes y escenarios para incentivar la participación y el avance de los jugadores.</p>
+      <p>5. Registro y seguimiento del progreso: se utilizará Firebase para implementar el registro de jugadores y almacenar sus avances, permitiendo que puedan continuar sus misiones cuando vuelvan a ingresar al videojuego.</p>
+      <p>6. Promoción de hábitos ambientales en la vida cotidiana: se buscará que los conocimientos adquiridos durante el juego puedan aplicarse en otros espacios, motivando a los niños a separar los residuos en sus hogares y colegios e involucrar a sus familias en el cuidado del medioambiente.</p>
+    </aside>
+  </section>
+
+  <!-- 12 · Reflexión final -->
+  <section class="slide" data-time="20">
+    <div class="card">
+      <div class="sec rv"><b>5</b>Reflexión final</div>
+      <h2 class="rv" style="--i:1">Somos <em>agentes de cambio</em></h2>
+      <div class="grid6" style="grid-template-columns:repeat(2,1fr); margin-top:20px">
+        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>Cuidar el planeta empieza en cada persona</h4><p>No solo depende de las instituciones: depende de nuestras decisiones diarias.</p></div></div>
+        <div class="box rv" style="--i:3"><span class="num">2</span><div><h4>La tecnología también educa</h4><p>Puede sensibilizar y promover transformaciones positivas en la sociedad.</p></div></div>
+        <div class="box rv" style="--i:4"><span class="num">3</span><div><h4>Una necesidad real</h4><p>Unimos nuestros conocimientos para formar hábitos responsables desde la infancia.</p></div></div>
+        <div class="box rv" style="--i:5"><span class="num">4</span><div><h4>Principios que nos guían</h4><p>Dignidad humana, solidaridad y respeto por la casa común.</p></div></div>
+      </div>
+    </div>
+    <aside>
+      <p>El desarrollo de EcoMisión: Guardianes del Planeta nos permitió reconocer que podemos desempeñar un papel importante como agentes de cambio frente a las problemáticas sociales y ambientales de nuestro entorno. Comprendimos que la responsabilidad de cuidar el planeta no corresponde únicamente a las instituciones o entidades encargadas de la gestión ambiental, sino que comienza con las decisiones y acciones que cada persona realiza diariamente.</p>
+      <p>Como equipo, identificamos que la tecnología puede utilizarse no solamente como una herramienta de entretenimiento, sino también como un medio para educar, sensibilizar y promover transformaciones positivas en la sociedad.</p>
+      <p>Esta propuesta nos permitió relacionar nuestros conocimientos y habilidades con una necesidad real, buscando una alternativa educativa que contribuya a formar hábitos responsables desde la infancia. Asimismo, reconocimos la importancia de la dignidad humana, la solidaridad y el respeto por la casa común como principios fundamentales para construir comunidades más conscientes y sostenibles.</p>
+    </aside>
+  </section>
+
+  <!-- 13 · Cierre: planeta limpio -->
+  <section class="slide" id="s-close" data-time="14">
+    <div class="card">
+      <div class="chars"><img class="pop bob" style="--i:0" data-a="chars.eco-happy" alt="ECO"><img class="pop bob" style="--i:1; animation-delay:.5s" data-a="chars.reciclin-happy" alt="RECICLÍN"></div>
+      <h2 class="rv" style="--i:2; font-size:84px">Pequeñas acciones, <em>grandes cambios</em></h2>
+      <p class="lead rv" style="--i:3; text-align:center">Cada decisión cuenta. Proteger el medioambiente es una responsabilidad compartida.</p>
+      <p class="quote rv" style="--i:4; margin-top:26px; color:var(--green-dark)">¡Conviértete en guardián del planeta!</p>
+    </div>
+    <aside>
+      <p>Finalmente, consideramos que pequeñas acciones pueden generar grandes cambios cuando se desarrollan de manera colectiva. Por medio de EcoMisión queremos motivar a los niños a convertirse en guardianes del planeta, comprendiendo que cada decisión cuenta y que proteger el medioambiente es una responsabilidad compartida.</p>
+      <p>A continuación, el tráiler del videojuego.</p>
+    </aside>
+  </section>
+
+  <!-- 14 · Tráiler -->
+  <section class="slide" id="s-trailer" data-time="30">
+    <aside><p>Tráiler de EcoMisión (30 segundos, con sonido). Al terminar aparece el agradecimiento.</p></aside>
+  </section>
+
+  <div id="thanks"><div><h1>¡Gracias!</h1><p>EcoMisión: Guardianes del Planeta</p></div></div>
+  <button id="playbtn" type="button">▶ Ver el tráiler</button>
+
+  <div id="hud">
+    <div class="pill" id="clock"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="10"/><path d="M50 28V50L66 60" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/></svg><span id="clocktxt">0:00 / 5:00</span></div>
+    <div class="pill"><span>Planeta limpio</span><div id="meter"><i></i></div><span id="pct">0 %</span></div>
+  </div>
+  <div id="foot"></div>
+  <div id="notes"></div>
+</div>
+
+<script>const A = __ASSETS__;</script>
+<script type="text/plain" id="vid" data-type="__VIDEO_TYPE__">__VIDEO__</script>
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...document.querySelectorAll('.slide')];
+  const TRAILER = slides.length - 1, CLOSE = slides.length - 2;
+  const video = document.getElementById('bgvideo');
+  const notes = document.getElementById('notes');
+
+  // ---- Recursos incrustados: arte del juego y video
+  const svgUrl = (svg) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  const assetUrl = (key) => {
+    const [group, name] = key.split('.');
+    const v = A[group][name];
+    return group === 'frames' ? 'data:image/jpeg;base64,' + v : svgUrl(v);
+  };
+  document.querySelectorAll('img[data-a]').forEach((img) => { img.src = assetUrl(img.dataset.a); });
+  const vtag = document.getElementById('vid');
+  const bin = atob(vtag.textContent.trim());
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  video.src = URL.createObjectURL(new Blob([bytes], { type: vtag.dataset.type }));
+  vtag.textContent = '';
+
+  // ---- Escalado del escenario de 1920x1080 a la ventana
+  const fit = () => {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  };
+  addEventListener('resize', fit); fit();
+
+  // ---- Basura: residuos reales del juego regados por la pantalla
+  const rnd = (i) => { const v = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return v - Math.floor(v); };
+  const BIN_POS = { white: [720, 980], black: [960, 980], green: [1200, 980] };
+  const layer = document.getElementById('trashlayer');
+  const urls = {}; for (const w of A.wastes) urls[w.id] = svgUrl(w.svg);
+  const items = [];
+  const N = 120;
+  for (let i = 0; i < N; i++) {
+    const w = A.wastes[Math.floor(rnd(i) * A.wastes.length)];
+    // Más concentrada en el centro al inicio, para tapar el título de la portada.
+    const cx = i < 40 ? 260 + rnd(i + 300) * 1400 : -60 + rnd(i + 100) * 2000;
+    const cy = i < 40 ? 260 + rnd(i + 400) * 560 : -60 + rnd(i + 200) * 1160;
+    const size = 120 + rnd(i + 500) * 110;
+    const el = document.createElement('img');
+    el.className = 'trash instant';
+    el.src = urls[w.id];
+    el.alt = '';
+    el.style.cssText = `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px;--r:${Math.round(rnd(i + 600) * 360)}deg`;
+    const [bx, by] = BIN_POS[w.bin];
+    el.style.setProperty('--tx', `${bx - cx}px`);
+    el.style.setProperty('--ty', `${by - cy}px`);
+    layer.appendChild(el);
+    // Umbral: la basura sale poco a poco; la del centro, primero.
+    const d = Math.min(1, Math.hypot((cx - 960) / 960, (cy - 540) / 540) / 1.2);
+    items.push({ el, thr: 0.35 * rnd(i + 700) + 0.65 * d, visible: true });
+  }
+  const smog = document.getElementById('smog');
+  for (let i = 0; i < 9; i++) {
+    const b = document.createElement('div');
+    const s = 500 + rnd(i + 800) * 500;
+    b.className = 'blob';
+    b.style.cssText = `width:${s}px;height:${s * .6}px;left:${rnd(i + 900) * 1700}px;top:${rnd(i + 950) * 900}px;animation-delay:${-rnd(i) * 14}s`;
+    smog.appendChild(b);
+  }
+  const flies = [];
+  for (let i = 0; i < 7; i++) {
+    const f = document.createElement('div');
+    f.className = 'fly';
+    stage.appendChild(f);
+    flies.push({ el: f, x: 300 + rnd(i + 30) * 1300, y: 250 + rnd(i + 40) * 600, p: rnd(i + 50) * 6 });
+  }
+  let flyOn = true;
+  const buzz = (t) => {
+    for (const f of flies) {
+      f.el.style.opacity = flyOn ? 1 : 0;
+      f.el.style.left = `${f.x + Math.sin(t / 260 + f.p) * 60 + Math.sin(t / 97 + f.p * 2) * 18}px`;
+      f.el.style.top = `${f.y + Math.cos(t / 330 + f.p) * 40 + Math.cos(t / 83 + f.p) * 14}px`;
+    }
+    requestAnimationFrame(buzz);
+  };
+  requestAnimationFrame(buzz);
+
+  const binsEl = document.getElementById('bins');
+  let binsTimer = null;
+  // Nivel de basura de cada diapositiva: 1 en la portada y 0 en el cierre.
+  const levelFor = (i) => (i === 0 ? 1 : i >= CLOSE ? 0 : 0.88 * (1 - (i - 1) / (CLOSE - 1)));
+  function applyLevel(level, idx, animate) {
+    let leaving = 0;
+    for (const it of items) {
+      const show = it.thr < level;
+      it.el.classList.toggle('front', idx === 0);
+      if (show === it.visible) continue;
+      it.visible = show;
+      if (!animate) { it.el.classList.add('instant'); it.el.classList.toggle('gone', !show); continue; }
+      it.el.classList.remove('instant');
+      if (!show) { // vuela a su caneca
+        const delay = Math.round(rnd(leaving * 7 + idx) * 450);
+        leaving++;
+        it.el.classList.add('flying');
+        it.el.style.transitionDelay = `${delay}ms, ${delay + 650}ms`;
+        requestAnimationFrame(() => it.el.classList.add('gone'));
+        setTimeout(() => it.el.classList.remove('flying'), delay + 1000);
+      } else {
+        it.el.style.transitionDelay = '0ms, 0ms';
+        it.el.classList.remove('gone');
+      }
+    }
+    if (animate && leaving) {
+      binsEl.classList.add('up');
+      clearTimeout(binsTimer);
+      setTimeout(() => sparkles(), 950);
+      binsTimer = setTimeout(() => binsEl.classList.remove('up'), 1900);
+    }
+    document.getElementById('dirt').style.opacity = String(level * 0.92);
+    smog.style.opacity = String(level);
+    flyOn = idx === 0; // las moscas solo rondan la portada
+    const pct = Math.round((1 - level) * 100);
+    document.querySelector('#meter i').style.width = pct + '%';
+    document.getElementById('pct').textContent = pct + ' %';
+  }
+  function sparkles() {
+    for (let i = 0; i < 14; i++) {
+      const s = document.createElement('img');
+      s.className = 'spark';
+      s.src = svgUrl(A.star);
+      const [bx] = Object.values(BIN_POS)[i % 3];
+      s.style.left = `${bx - 13 + (Math.random() - .5) * 80}px`;
+      s.style.top = '880px';
+      s.style.setProperty('--sx', `${(Math.random() - .5) * 160}px`);
+      stage.appendChild(s);
+      setTimeout(() => s.remove(), 1200);
+    }
+  }
+
+  // ---- Puntos de avance
+  const foot = document.getElementById('foot');
+  slides.forEach(() => foot.appendChild(document.createElement('i')));
+
+  // ---- Reloj de la presentación (máximo 5 minutos)
+  const LIMIT = 300;
+  let t0 = null;
+  const clock = document.getElementById('clock'), clockTxt = document.getElementById('clocktxt');
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  setInterval(() => {
+    if (t0 === null) return;
+    const s = (performance.now() - t0) / 1000;
+    clockTxt.textContent = `${mmss(s)} / 5:00`;
+    clock.classList.toggle('warn', s > LIMIT - 30 && s <= LIMIT);
+    clock.classList.toggle('over', s > LIMIT);
+  }, 250);
+
+  // ---- Confeti del cierre
+  const confetti = [];
+  function setConfetti(on) {
+    if (on && !confetti.length) {
+      const cols = ['#FFD23F', '#FF8A3D', '#5CC8F5', '#EF5350', '#FFFFFF', '#7ED957'];
+      for (let i = 0; i < 70; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.cssText = `left:${rnd(i + 1000) * 1920}px;background:${cols[i % 6]};animation-duration:${3 + rnd(i + 1100) * 3}s;animation-delay:${-rnd(i + 1200) * 6}s`;
+        stage.appendChild(c); confetti.push(c);
+      }
+    } else if (!on) { confetti.splice(0).forEach((c) => c.remove()); }
+  }
+
+  // ---- Video: de fondo tenue, y a pantalla completa con sonido en el tráiler
+  const thanks = document.getElementById('thanks'), playbtn = document.getElementById('playbtn');
+  function backgroundVideo(level) {
+    thanks.classList.remove('on'); playbtn.style.display = 'none';
+    video.loop = true; video.muted = true; video.style.zIndex = 1; video.classList.add('bg');
+    video.style.opacity = String(0.08 + (1 - level) * 0.6);
+    if (video.paused) video.play().catch(() => {});
+  }
+  function playTrailer() {
+    video.loop = false; video.muted = false; video.volume = 1; video.style.zIndex = 4; video.style.opacity = '1'; video.classList.remove('bg');
+    thanks.classList.remove('on');
+    video.currentTime = 0;
+    video.play().then(() => { playbtn.style.display = 'none'; }).catch(() => { playbtn.style.display = 'block'; });
+  }
+  playbtn.addEventListener('click', (e) => { e.stopPropagation(); playTrailer(); });
+  video.addEventListener('ended', () => { if (idx === TRAILER) thanks.classList.add('on'); });
+
+  // ---- Navegación
+  let idx = -1;
+  function go(i, animate = true) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    if (i === idx) return;
+    if (t0 === null && idx >= 0) t0 = performance.now();
+    idx = i;
+    slides.forEach((s, k) => { s.classList.toggle('active', k === i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+    [...foot.children].forEach((d, k) => d.classList.toggle('on', k === i));
+    const level = levelFor(i);
+    applyLevel(level, i, animate);
+    stage.classList.toggle('hide-ui', i === TRAILER);
+    setConfetti(i === CLOSE);
+    if (i === TRAILER) playTrailer(); else backgroundVideo(level);
+    const n = slides[i].querySelector('aside');
+    notes.innerHTML = `<h5>Diapositiva ${i + 1} de ${slides.length} · tiempo sugerido ${slides[i].dataset.time} s</h5>` + (n ? n.innerHTML : '');
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+  const next = () => go(idx + 1), prev = () => go(idx - 1);
+  addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(slides.length - 1);
+    else if (e.key === 'n' || e.key === 'N') notes.classList.toggle('on');
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); }
+    else if (e.key === 'r' || e.key === 'R') { t0 = performance.now(); }
+  });
+  stage.addEventListener('click', (e) => {
+    if (notes.contains(e.target)) return;
+    const rect = stage.getBoundingClientRect();
+    if (e.clientX - rect.left < rect.width * 0.25) prev(); else next();
+  });
+  let tx = null;
+  addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', (e) => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+  });
+
+  const start = parseInt(location.hash.slice(1), 10);
+  go(Number.isFinite(start) ? start - 1 : 0, false);
+  window.__pres = { go, get idx() { return idx; }, slides: slides.length };
+})();
+</script>
+</body>
+</html>

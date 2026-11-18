@@ -10,7 +10,8 @@
     "preview": "vite preview --port 4173 --strictPort",
     "test": "vitest run",
     "test:smoke": "node scripts/smoke.cjs",
-    "trailer": "node scripts/trailer.cjs"
+    "trailer": "node scripts/trailer.cjs",
+    "presentation": "node scripts/presentation.mjs"
   },
   "dependencies": {
     "@fontsource/fredoka": "^5.3.0",

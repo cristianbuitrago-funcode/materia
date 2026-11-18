@@ -24,6 +24,17 @@ npm run test:smoke   # recorre el juego compilado en un navegador real (requiere
 del juego y su música. Se regenera con `npm run build && npm run trailer` (requiere Playwright,
 Chromium y ffmpeg): el guion está en `scripts/trailer.cjs`.
 
+## Presentación
+
+`media/presentacion-ecomision.html` es la presentación del proyecto (guía de acción socialmente
+responsable de UNIMINUTO) en un único archivo HTML, con el arte del juego y el tráiler incrustados.
+Empieza con la pantalla cubierta de basura, que vuela a sus canecas en cada diapositiva hasta que
+queda el tráiler de fondo; al final se reproduce el tráiler con sonido.
+
+Controles: → o clic para avanzar, ← para volver, **N** muestra las notas del presentador (texto
+completo de cada sección), **F** pantalla completa y **R** reinicia el reloj de 5 minutos.
+Se regenera con `npm run presentation` (requiere ffmpeg); el contenido está en `presentation/template.html`.
+
 ## Arquitectura técnica
 
 - **Phaser 3** (motor 2D, WebGL con respaldo a Canvas) + **Vite** (empaquetado) + JavaScript ES modules.
