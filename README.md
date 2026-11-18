@@ -31,8 +31,12 @@ responsable de UNIMINUTO) en un único archivo HTML, con el arte del juego y el 
 Empieza con la pantalla cubierta de basura, que vuela a sus canecas en cada diapositiva hasta que
 queda el tráiler de fondo; al final se reproduce el tráiler con sonido.
 
+Contiene solo los puntos pedidos en la guía: apropiarse (las dos preguntas), comprender éticamente
+(dignidad humana), la propuesta, los objetivos y las estrategias; dura 4 min 35 s con el tráiler.
+
 Controles: → o clic para avanzar, ← para volver, **N** muestra las notas del presentador (texto
-completo de cada sección), **F** pantalla completa y **R** reinicia el reloj de 5 minutos.
+completo de cada sección), **F** pantalla completa y **R** reinicia el reloj de 5 minutos. Arriba se
+ve el tiempo total y el de la diapositiva actual frente al sugerido.
 Se regenera con `npm run presentation` (requiere ffmpeg); el contenido está en `presentation/template.html`.
 
 ## Arquitectura técnica

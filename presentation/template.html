@@ -128,7 +128,8 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
 #hud { position: absolute; left: 0; right: 0; top: 0; height: 110px; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; pointer-events: none; transition: opacity .6s; }
 .pill { display: flex; align-items: center; gap: 14px; padding: 12px 26px; border-radius: 40px; background: rgba(255,249,232,.95); border: 4px solid var(--green-dark); font-size: 28px; font-weight: 700; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
 .pill svg { width: 34px; height: 34px; }
-#clock.warn { border-color: var(--orange); color: #b85a1c; } #clock.over { border-color: var(--red); color: var(--red); }
+#clock.warn, #pace.warn { border-color: var(--orange); color: #b85a1c; } #clock.over, #pace.over { border-color: var(--red); color: var(--red); }
+#hud > .pill:nth-child(2) { margin-right: auto; margin-left: 16px; }
 #meter { width: 260px; height: 20px; border-radius: 12px; background: #d9d2bd; overflow: hidden; }
 #meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--green), #8be04e); transition: width 1.2s ease; }
 #foot { position: absolute; left: 0; right: 0; bottom: 34px; z-index: 50; display: flex; justify-content: center; gap: 12px; pointer-events: none; transition: opacity .6s; }
@@ -163,96 +164,56 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     <div class="hint">Presiona → para empezar a limpiar el planeta</div>
     <aside>
       <p>Corporación Universitaria Minuto de Dios – UNIMINUTO · Desarrollo Social Contemporáneo · Guía de construcción de una acción socialmente responsable.</p>
-      <p>Presentamos EcoMisión: Guardianes del Planeta. Mientras avanzamos, la basura de esta pantalla se irá a su caneca: blanca, negra o verde.</p>
+      <p>Presentamos EcoMisión: Guardianes del Planeta, nuestra acción socialmente responsable frente a la contaminación por residuos sólidos. Mientras avanzamos, la basura de esta pantalla se irá a su caneca: blanca, negra o verde.</p>
     </aside>
   </section>
 
-  <!-- 1 · Contextualización -->
-  <section class="slide" data-time="18">
+  <!-- 1 · Apropiarse: percepción -->
+  <section class="slide" data-time="30">
     <div class="card">
-      <div class="sec rv"><b>1</b>Contextualización de la problemática</div>
-      <h2 class="rv" style="--i:1">La contaminación por <em>residuos sólidos</em></h2>
-      <p class="lead rv" style="--i:2">Afecta los ecosistemas, los recursos naturales y la calidad de vida de las personas. La disposición inadecuada de las basuras y no saber separarlas contaminan:</p>
-      <div class="row">
-        <div class="box ico pop" style="--i:3"><img data-a="worlds.forest" alt=""><h3>El suelo</h3></div>
-        <div class="box ico pop" style="--i:4"><img data-a="worlds.ocean" alt=""><h3>El agua</h3></div>
-        <div class="box ico pop" style="--i:5"><img data-a="worlds.city" alt=""><h3>Los espacios naturales y públicos</h3></div>
-      </div>
-    </div>
-    <aside>
-      <p>La contaminación por residuos sólidos es una problemática socioambiental que afecta directamente los ecosistemas, los recursos naturales y la calidad de vida de las personas. La disposición inadecuada de las basuras y la falta de conocimiento sobre la correcta separación de los residuos contribuyen a la contaminación del suelo, el agua y otros espacios naturales.</p>
-    </aside>
-  </section>
-
-  <!-- 2 · Causas y actores -->
-  <section class="slide" data-time="18">
-    <div class="card">
-      <div class="sec rv"><b>1</b>Contextualización de la problemática</div>
-      <h2 class="rv" style="--i:1; margin:14px 0 4px">Causas y actores</h2>
-      <div class="row" style="margin-top:14px; flex:none">
-        <div class="box warn rv" style="--i:2; padding:28px 34px; flex:1.15"><h3>Principales causas</h3>
-          <ul><li>Falta de educación ambiental</li><li>Hábitos inadecuados de consumo</li><li>No conocer los códigos de separación</li><li>Poca conciencia de las consecuencias</li></ul></div>
-        <div class="box rv" style="--i:3; padding:28px 34px"><h3>Actores involucrados</h3>
-          <div class="chips" style="gap:12px"><span class="chip" style="font-size:26px;padding:10px 20px">Ciudadanos</span><span class="chip b" style="font-size:26px;padding:10px 20px">Familias</span><span class="chip o" style="font-size:26px;padding:10px 20px">Instituciones educativas</span><span class="chip p" style="font-size:26px;padding:10px 20px">Comunidades</span><span class="chip" style="font-size:26px;padding:10px 20px">Entidades de gestión de residuos</span></div></div>
-      </div>
-      <div class="hl rv" style="--i:4; margin-top:22px; padding:18px 30px; font-size:31px"><img data-a="chars.eco-happy" alt="" style="width:96px;height:110px"><span><b>Los niños</b> son una población clave: desde pequeños desarrollan hábitos y valores de cuidado del medioambiente.</span></div>
-    </div>
-    <aside>
-      <p>Entre las principales causas de esta problemática se encuentran la falta de educación ambiental, los hábitos inadecuados de consumo, el desconocimiento de los códigos de separación de residuos y la poca conciencia sobre las consecuencias que generan nuestras acciones cotidianas.</p>
-      <p>Los actores involucrados son los ciudadanos, las familias, las instituciones educativas, las comunidades y las entidades responsables de la gestión de residuos. Dentro de estos actores, los niños representan una población importante, ya que desde edades tempranas pueden desarrollar hábitos y valores relacionados con el cuidado del medioambiente.</p>
-    </aside>
-  </section>
-
-  <!-- 3 · Consecuencias y respuesta -->
-  <section class="slide" data-time="18">
-    <div class="card">
-      <div class="sec rv"><b>1</b>Contextualización de la problemática</div>
-      <h2 class="rv" style="--i:1; margin:14px 0 4px">Consecuencias… y nuestra respuesta</h2>
-      <div class="row">
-        <div class="box warn rv" style="--i:2"><h3>Consecuencias</h3>
-          <ul><li>Deterioro de los ecosistemas</li><li>Contaminación de fuentes hídricas</li><li>Afectación de la biodiversidad</li><li>Residuos acumulados en espacios públicos y naturales</li></ul></div>
-        <div class="box rv" style="--i:3; flex:1.1"><h3>Por eso proponemos…</h3>
-          <p>Fortalecer la <em>educación ambiental</em> para comprender la importancia de separar los residuos y asumir responsabilidades individuales y colectivas.</p>
-          <div class="hl" style="padding:18px 26px; font-size:30px"><img data-a="chars.reciclin-happy" alt="" style="width:92px;height:106px"><span>Un <b>videojuego educativo</b>: aprendizaje ambiental divertido, interactivo y significativo para los niños.</span></div>
-        </div>
-      </div>
-    </div>
-    <aside>
-      <p>Entre las consecuencias de esta problemática se encuentran el deterioro de los ecosistemas, la contaminación de fuentes hídricas, la afectación de la biodiversidad y la acumulación de residuos en espacios públicos y naturales.</p>
-      <p>Frente a esta situación, es fundamental fortalecer la educación ambiental mediante estrategias que permitan comprender la importancia de separar correctamente los residuos y asumir responsabilidades individuales y colectivas. Por esta razón, proponemos desarrollar un videojuego educativo que convierta el aprendizaje ambiental en una experiencia divertida, interactiva y significativa para los niños.</p>
-    </aside>
-  </section>
-
-  <!-- 4 · Apropiarse -->
-  <section class="slide" data-time="20">
-    <div class="card">
-      <div class="sec rv"><b>2</b>Apropiarse: hacerse cargo de la realidad</div>
-      <h2 class="rv" style="--i:1; margin:16px 0 4px">Así cambió nuestra mirada</h2>
-      <div class="vs rv" style="--i:2">
-        <div class="box"><span class="tag before">ANTES · La problemática</span><p>Era culpa de quienes arrojan residuos en lugares inadecuados.</p></div>
+      <div class="sec rv"><b>1</b>Apropiarse: hacerse cargo de la realidad</div>
+      <h2 class="rv" style="--i:1; font-size:60px">¿Qué cambió en nuestra percepción de la <em>problemática</em>?</h2>
+      <div class="vs rv" style="--i:2; margin-top:10px">
+        <div class="box"><span class="tag before">ANTES</span><p>La contaminación por basuras era culpa de las personas que arrojan residuos en lugares inadecuados.</p></div>
         <div class="arrow">→</div>
-        <div class="box"><span class="tag after">AHORA</span><p>Es más amplia: falta de educación ambiental, hábitos de consumo y poca responsabilidad colectiva. <em>Separar, reducir y reutilizar</em> sí cuenta, y educar desde la infancia genera cambios duraderos.</p></div>
+        <div class="box"><span class="tag after">AHORA</span><p>Es una situación más amplia: falta de <em>educación ambiental</em>, <em>hábitos de consumo</em> y poca <em>responsabilidad colectiva</em> en el manejo de los residuos.</p></div>
       </div>
-      <div class="vs rv" style="--i:3">
-        <div class="box"><span class="tag before">ANTES · Los actores</span><p>La responsabilidad era de quienes recogen la basura y de quienes la arrojan.</p></div>
-        <div class="arrow">→</div>
-        <div class="box"><span class="tag after">AHORA</span><p><em>Todos somos actores:</em> la responsabilidad es compartida. Los niños aprenden a decidir con responsabilidad y lo transmiten a sus familias y comunidades.</p></div>
+      <div class="row" style="flex:none; margin-top:24px">
+        <div class="box rv" style="--i:3; flex:1.25; padding:24px 30px"><h3>Pequeñas acciones que sí cuentan</h3>
+          <div class="chips" style="gap:12px"><span class="chip">Separar bien las basuras</span><span class="chip o">Reducir lo innecesario</span><span class="chip b">Reutilizar materiales</span></div></div>
+        <div class="hl rv" style="--i:4; flex:1; margin-top:0; font-size:31px"><img data-a="chars.eco-happy" alt="" style="width:96px;height:110px"><span>Educar desde la <b>infancia</b> genera cambios duraderos en la sociedad.</span></div>
       </div>
     </div>
     <aside>
-      <h5>¿Qué cambios se generaron en su percepción de la problemática?</h5>
+      <h5>¿Qué cambios se generaron en su percepción de la problemática antes y después de trabajarla en este curso?</h5>
       <p>Antes de trabajar esta problemática, considerábamos que la contaminación por basuras era principalmente consecuencia de las personas que arrojaban residuos en lugares inadecuados. Sin embargo, durante el desarrollo del curso comprendimos que se trata de una situación más amplia, relacionada también con la falta de educación ambiental, los hábitos de consumo y la poca responsabilidad colectiva frente al manejo de los residuos.</p>
       <p>Ahora reconocemos que pequeñas acciones cotidianas, como separar correctamente las basuras, reducir el consumo de productos innecesarios y reutilizar materiales, pueden contribuir a disminuir el impacto ambiental. También comprendimos que la educación desde la infancia es fundamental para generar cambios duraderos en la sociedad.</p>
-      <h5>¿Cómo veían a los actores antes y cómo los perciben ahora?</h5>
+    </aside>
+  </section>
+
+  <!-- 2 · Apropiarse: actores -->
+  <section class="slide" data-time="25">
+    <div class="card">
+      <div class="sec rv"><b>1</b>Apropiarse: hacerse cargo de la realidad</div>
+      <h2 class="rv" style="--i:1">¿Cómo vemos ahora a los <em>actores</em>?</h2>
+      <div class="vs rv" style="--i:2; margin-top:26px">
+        <div class="box"><span class="tag before">ANTES</span><p>La responsabilidad era de quienes recogen las basuras y de quienes las arrojan en espacios públicos.</p></div>
+        <div class="arrow">→</div>
+        <div class="box"><span class="tag after">AHORA</span><p><em>Todos somos actores involucrados:</em> la responsabilidad de cuidar el medioambiente es compartida.</p></div>
+      </div>
+      <div class="hl rv" style="--i:3; margin-top:30px"><img data-a="chars.reciclin-happy" alt=""><span><b>Los niños</b> también transforman esta realidad: aprenden a decidir con responsabilidad y lo llevan a sus <b>familias y comunidades</b>.</span></div>
+    </div>
+    <aside>
+      <h5>¿Cómo veían a los actores involucrados en la problemática antes de acercarse a ellos y cómo los perciben ahora?</h5>
       <p>Anteriormente, relacionábamos la responsabilidad de esta problemática principalmente con las personas encargadas de recoger las basuras y con quienes las arrojaban en espacios públicos. Actualmente, comprendemos que todos somos actores involucrados y que tenemos una responsabilidad compartida en el cuidado del medioambiente.</p>
       <p>También reconocemos a los niños como participantes importantes en la transformación de esta realidad, ya que pueden aprender desde pequeños a tomar decisiones responsables y transmitir estos conocimientos a sus familias y comunidades. Por ello, consideramos que brindarles herramientas educativas puede contribuir a formar ciudadanos más conscientes y comprometidos con el planeta.</p>
     </aside>
   </section>
 
-  <!-- 5 · Ética -->
-  <section class="slide" data-time="18">
+  <!-- 3 · Ética -->
+  <section class="slide" data-time="30">
     <div class="card">
-      <div class="sec rv"><b>3</b>Comprender éticamente la realidad</div>
+      <div class="sec rv"><b>2</b>Comprender éticamente la realidad</div>
       <h2 class="rv" style="--i:1">Dignidad humana y <em>casa común</em></h2>
       <p class="quote rv" style="--i:2; font-size:40px">“Todas las personas merecen vivir en un ambiente sano que garantice su bienestar y su salud.”</p>
       <div class="row">
@@ -272,14 +233,14 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     </aside>
   </section>
 
-  <!-- 6 · La propuesta -->
-  <section class="slide" data-time="20">
+  <!-- 4 · La propuesta -->
+  <section class="slide" data-time="28">
     <div class="card">
-      <div class="sec rv"><b>4</b>Actuar: encargarse de la realidad</div>
+      <div class="sec rv"><b>3</b>Actuar: encargarse de la realidad</div>
       <h2 class="rv" style="--i:1">Nuestra propuesta: <em>EcoMisión</em></h2>
       <div class="row" style="margin-top:14px">
         <div style="flex:1.05; display:flex; flex-direction:column; gap:22px">
-          <p class="lead rv" style="--i:2; font-size:34px">Un videojuego educativo para niños de <em>5 a 12 años</em> que promueve la educación ambiental con una experiencia digital interactiva.</p>
+          <p class="lead rv" style="--i:2; font-size:34px">Un videojuego educativo web para niños de <em>5 a 12 años</em> que promueve la educación ambiental con una experiencia digital interactiva.</p>
           <div class="box rv" style="--i:3; padding:26px 32px"><ul>
             <li>Un personaje invita a convertirse en guardián del planeta.</li>
             <li>Recorren escenarios: ciudad contaminada, bosque, playa y océano.</li>
@@ -295,10 +256,10 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     </aside>
   </section>
 
-  <!-- 7 · Cómo se juega -->
-  <section class="slide" data-time="20">
+  <!-- 5 · Cómo se juega -->
+  <section class="slide" data-time="28">
     <div class="card">
-      <div class="sec rv"><b>4</b>Actuar: encargarse de la realidad</div>
+      <div class="sec rv"><b>3</b>Actuar: encargarse de la realidad</div>
       <h2 class="rv" style="--i:1">Arrastrar, clasificar y <em>aprender</em></h2>
       <div class="row" style="margin-top:20px">
         <div class="bins3" style="flex:1.15">
@@ -318,10 +279,10 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     </aside>
   </section>
 
-  <!-- 8 · Motivación y progreso -->
-  <section class="slide" data-time="18">
+  <!-- 6 · Motivación y progreso -->
+  <section class="slide" data-time="22">
     <div class="card">
-      <div class="sec rv"><b>4</b>Actuar: encargarse de la realidad</div>
+      <div class="sec rv"><b>3</b>Actuar: encargarse de la realidad</div>
       <h2 class="rv" style="--i:1">Niveles, retos y <em>recompensas</em></h2>
       <div class="row" style="margin-top:16px">
         <div style="flex:1; display:flex; flex-direction:column; gap:22px">
@@ -337,10 +298,10 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     </aside>
   </section>
 
-  <!-- 9 · Objetivos -->
-  <section class="slide" data-time="20">
+  <!-- 7 · Objetivos -->
+  <section class="slide" data-time="32">
     <div class="card">
-      <div class="sec rv"><b>5</b>Perspectiva pedagógica y comunicativa</div>
+      <div class="sec rv"><b>3</b>Actuar · Perspectiva pedagógica</div>
       <h2 class="rv" style="--i:1">Objetivos</h2>
       <div class="hl rv" style="--i:2; margin-top:6px"><img data-a="chars.reciclin-happy" alt=""><span><b>General:</b> promover la educación ambiental en niños de 5 a 12 años con un videojuego educativo e interactivo que fomente la correcta separación de residuos y hábitos responsables con el medioambiente.</span></div>
       <div class="row" style="margin-top:28px">
@@ -357,33 +318,13 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     </aside>
   </section>
 
-  <!-- 10 · Justificación -->
-  <section class="slide" data-time="20">
+  <!-- 8 · Estrategias -->
+  <section class="slide" data-time="40">
     <div class="card">
-      <div class="sec rv"><b>5</b>Perspectiva pedagógica y comunicativa</div>
-      <h2 class="rv" style="--i:1">¿Por qué un <em>videojuego</em>?</h2>
-      <div class="grid6" style="grid-template-columns:repeat(2,1fr); margin-top:20px">
-        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>La infancia forma hábitos</h4><p>Es la etapa en la que se construyen conocimientos, valores y hábitos para toda la vida.</p></div></div>
-        <div class="box rv" style="--i:3"><span class="num">2</span><div><h4>Despertar el interés</h4><p>Los métodos tradicionales no siempre logran interesar a todos los niños en lo ambiental.</p></div></div>
-        <div class="box rv" style="--i:4"><span class="num">3</span><div><h4>Aprender participando</h4><p>La tecnología facilita aprender explorando e interactuando, combinando entretenimiento y educación.</p></div></div>
-        <div class="box rv" style="--i:5"><span class="num">4</span><div><h4>Del juego a la vida</h4><p>Comportamientos que se llevan al hogar, la escuela y la comunidad: ciudadanos comprometidos.</p></div></div>
-      </div>
-    </div>
-    <aside>
-      <p>La educación ambiental desde la infancia es fundamental para construir una sociedad más consciente y comprometida con el cuidado de los recursos naturales. Los niños se encuentran en una etapa importante para desarrollar conocimientos, valores y hábitos que pueden acompañarlos durante toda su vida.</p>
-      <p>Sin embargo, los métodos tradicionales de enseñanza no siempre consiguen despertar el interés de todos los niños frente a las problemáticas ambientales. Por esta razón, consideramos que la tecnología y los videojuegos pueden convertirse en herramientas educativas que faciliten el aprendizaje mediante la participación, la exploración y la interacción.</p>
-      <p>EcoMisión: Guardianes del Planeta surge como una alternativa que combina entretenimiento y educación para enseñar la correcta separación de residuos de una manera sencilla y atractiva. A través de sus escenarios, misiones y recompensas, los niños podrán reconocer diferentes tipos de residuos, aprender a clasificarlos y comprender por qué es importante cuidar los espacios naturales.</p>
-      <p>La importancia de esta propuesta está en que busca ir más allá del aprendizaje teórico, promoviendo comportamientos responsables que puedan trasladarse al hogar, la escuela y la comunidad. De esta manera, el videojuego pretende contribuir a la formación de ciudadanos comprometidos con la protección del medioambiente y el bienestar colectivo.</p>
-    </aside>
-  </section>
-
-  <!-- 11 · Estrategias -->
-  <section class="slide" data-time="22">
-    <div class="card">
-      <div class="sec rv"><b>5</b>Perspectiva pedagógica y comunicativa</div>
+      <div class="sec rv"><b>3</b>Actuar · Perspectiva pedagógica</div>
       <h2 class="rv" style="--i:1">Estrategias y acciones</h2>
       <div class="grid6">
-        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>Diseño del videojuego</h4><p>Personajes y escenarios adaptados a niños de 5 a 12 años.</p></div></div>
+        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>Aplicación web: el videojuego</h4><p>Personajes y escenarios adaptados a niños de 5 a 12 años.</p></div></div>
         <div class="box rv" style="--i:3"><span class="num">2</span><div><h4>Misiones de clasificación</h4><p>Ciudades, bosques, playas y océanos: blanca, negra y verde.</p></div></div>
         <div class="box rv" style="--i:4"><span class="num">3</span><div><h4>Retroalimentación</h4><p>Una explicación breve de cuál era la opción correcta y por qué.</p></div></div>
         <div class="box rv" style="--i:5"><span class="num">4</span><div><h4>Recompensas</h4><p>Monedas, experiencia, insignias y desbloqueos que motivan.</p></div></div>
@@ -401,40 +342,7 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
     </aside>
   </section>
 
-  <!-- 12 · Reflexión final -->
-  <section class="slide" data-time="20">
-    <div class="card">
-      <div class="sec rv"><b>5</b>Reflexión final</div>
-      <h2 class="rv" style="--i:1">Somos <em>agentes de cambio</em></h2>
-      <div class="grid6" style="grid-template-columns:repeat(2,1fr); margin-top:20px">
-        <div class="box rv" style="--i:2"><span class="num">1</span><div><h4>Cuidar el planeta empieza en cada persona</h4><p>No solo depende de las instituciones: depende de nuestras decisiones diarias.</p></div></div>
-        <div class="box rv" style="--i:3"><span class="num">2</span><div><h4>La tecnología también educa</h4><p>Puede sensibilizar y promover transformaciones positivas en la sociedad.</p></div></div>
-        <div class="box rv" style="--i:4"><span class="num">3</span><div><h4>Una necesidad real</h4><p>Unimos nuestros conocimientos para formar hábitos responsables desde la infancia.</p></div></div>
-        <div class="box rv" style="--i:5"><span class="num">4</span><div><h4>Principios que nos guían</h4><p>Dignidad humana, solidaridad y respeto por la casa común.</p></div></div>
-      </div>
-    </div>
-    <aside>
-      <p>El desarrollo de EcoMisión: Guardianes del Planeta nos permitió reconocer que podemos desempeñar un papel importante como agentes de cambio frente a las problemáticas sociales y ambientales de nuestro entorno. Comprendimos que la responsabilidad de cuidar el planeta no corresponde únicamente a las instituciones o entidades encargadas de la gestión ambiental, sino que comienza con las decisiones y acciones que cada persona realiza diariamente.</p>
-      <p>Como equipo, identificamos que la tecnología puede utilizarse no solamente como una herramienta de entretenimiento, sino también como un medio para educar, sensibilizar y promover transformaciones positivas en la sociedad.</p>
-      <p>Esta propuesta nos permitió relacionar nuestros conocimientos y habilidades con una necesidad real, buscando una alternativa educativa que contribuya a formar hábitos responsables desde la infancia. Asimismo, reconocimos la importancia de la dignidad humana, la solidaridad y el respeto por la casa común como principios fundamentales para construir comunidades más conscientes y sostenibles.</p>
-    </aside>
-  </section>
-
-  <!-- 13 · Cierre: planeta limpio -->
-  <section class="slide" id="s-close" data-time="14">
-    <div class="card">
-      <div class="chars"><img class="pop bob" style="--i:0" data-a="chars.eco-happy" alt="ECO"><img class="pop bob" style="--i:1; animation-delay:.5s" data-a="chars.reciclin-happy" alt="RECICLÍN"></div>
-      <h2 class="rv" style="--i:2; font-size:84px">Pequeñas acciones, <em>grandes cambios</em></h2>
-      <p class="lead rv" style="--i:3; text-align:center">Cada decisión cuenta. Proteger el medioambiente es una responsabilidad compartida.</p>
-      <p class="quote rv" style="--i:4; margin-top:26px; color:var(--green-dark)">¡Conviértete en guardián del planeta!</p>
-    </div>
-    <aside>
-      <p>Finalmente, consideramos que pequeñas acciones pueden generar grandes cambios cuando se desarrollan de manera colectiva. Por medio de EcoMisión queremos motivar a los niños a convertirse en guardianes del planeta, comprendiendo que cada decisión cuenta y que proteger el medioambiente es una responsabilidad compartida.</p>
-      <p>A continuación, el tráiler del videojuego.</p>
-    </aside>
-  </section>
-
-  <!-- 14 · Tráiler -->
+  <!-- 9 · Tráiler -->
   <section class="slide" id="s-trailer" data-time="30">
     <aside><p>Tráiler de EcoMisión (30 segundos, con sonido). Al terminar aparece el agradecimiento.</p></aside>
   </section>
@@ -444,6 +352,7 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
 
   <div id="hud">
     <div class="pill" id="clock"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="10"/><path d="M50 28V50L66 60" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/></svg><span id="clocktxt">0:00 / 5:00</span></div>
+    <div class="pill" id="pace"><span id="pacetxt">Diapositiva 0:00 / 0:00</span></div>
     <div class="pill"><span>Planeta limpio</span><div id="meter"><i></i></div><span id="pct">0 %</span></div>
   </div>
   <div id="foot"></div>
@@ -456,7 +365,7 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
 (() => {
   const stage = document.getElementById('stage');
   const slides = [...document.querySelectorAll('.slide')];
-  const TRAILER = slides.length - 1, CLOSE = slides.length - 2;
+  const TRAILER = slides.length - 1, LAST = slides.length - 2; // última diapositiva de contenido
   const video = document.getElementById('bgvideo');
   const notes = document.getElementById('notes');
 
@@ -537,7 +446,7 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
   const binsEl = document.getElementById('bins');
   let binsTimer = null;
   // Nivel de basura de cada diapositiva: 1 en la portada y 0 en el cierre.
-  const levelFor = (i) => (i === 0 ? 1 : i >= CLOSE ? 0 : 0.88 * (1 - (i - 1) / (CLOSE - 1)));
+  const levelFor = (i) => (i === 0 ? 1 : i >= LAST ? 0 : 0.88 * (1 - (i - 1) / (LAST - 1)));
   function applyLevel(level, idx, animate) {
     let leaving = 0;
     for (const it of items) {
@@ -595,7 +504,14 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
   let t0 = null;
   const clock = document.getElementById('clock'), clockTxt = document.getElementById('clocktxt');
   const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  const pace = document.getElementById('pace'), paceTxt = document.getElementById('pacetxt');
+  let slideStart = performance.now();
   setInterval(() => {
+    // Tiempo en la diapositiva actual frente al sugerido (naranja al pasarse, rojo con 10 s de más).
+    const own = (performance.now() - slideStart) / 1000, plan = Number(slides[idx].dataset.time);
+    paceTxt.textContent = `Diapositiva ${mmss(own)} / ${mmss(plan)}`;
+    pace.classList.toggle('warn', own > plan && own <= plan + 10);
+    pace.classList.toggle('over', own > plan + 10);
     if (t0 === null) return;
     const s = (performance.now() - t0) / 1000;
     clockTxt.textContent = `${mmss(s)} / 5:00`;
@@ -639,14 +555,15 @@ h2 em, .lead em, p em { font-style: normal; color: var(--orange); }
   function go(i, animate = true) {
     i = Math.max(0, Math.min(slides.length - 1, i));
     if (i === idx) return;
-    if (t0 === null && idx >= 0) t0 = performance.now();
+    if (t0 === null && idx >= 0) t0 = performance.now() - Number(slides[0].dataset.time) * 1000;
     idx = i;
+    slideStart = performance.now();
     slides.forEach((s, k) => { s.classList.toggle('active', k === i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
     [...foot.children].forEach((d, k) => d.classList.toggle('on', k === i));
     const level = levelFor(i);
     applyLevel(level, i, animate);
     stage.classList.toggle('hide-ui', i === TRAILER);
-    setConfetti(i === CLOSE);
+    setConfetti(false); // sin confeti sobre el texto
     if (i === TRAILER) playTrailer(); else backgroundVideo(level);
     const n = slides[i].querySelector('aside');
     notes.innerHTML = `<h5>Diapositiva ${i + 1} de ${slides.length} · tiempo sugerido ${slides[i].dataset.time} s</h5>` + (n ? n.innerHTML : '');
